@@ -220,6 +220,7 @@ const SiteEngHome = ({navigation}) => {
                           matDesc={response.data.Requests.material_description}
                           purpose={response.data.Requests.purpose}
                           priority={response.data.Requests.priority}
+                          matCat={response.data.Requests.material_category}
                         />
                       );
                     });
