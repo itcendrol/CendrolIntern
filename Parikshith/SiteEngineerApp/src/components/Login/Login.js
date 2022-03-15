@@ -325,12 +325,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)'
   },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
@@ -341,12 +341,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: windowWidth / 1.1,
+    width: windowWidth / 1.2,
   },
   modalText: {
     marginBottom: 25,
     textAlign: 'left',
     color: 'black',
+    fontFamily: 'Gilroy-Bold',
+    fontSize: 15,
   },
   errorInfoImg: {
     // objectFit: 'contain',

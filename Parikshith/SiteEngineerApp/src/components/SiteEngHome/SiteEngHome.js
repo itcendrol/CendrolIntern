@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
+  RefreshControl,
   StyleSheet,
   Text,
   useColorScheme,
@@ -22,13 +22,17 @@ import OrderDetailsModal from '../OrderDetailsModal/OrderDetailsModal';
 
 const windowWidth = Dimensions.get('window').width;
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const SiteEngHome = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [allProjects, setAllProjects] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
   const [orderDetails, setOrderDerails] = useState();
 
-  function handleBack(){
+  function handleBack() {
     BackHandler.exitApp();
   }
 
@@ -42,7 +46,7 @@ const SiteEngHome = ({navigation}) => {
 
       return () =>
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [])
+    }, []),
   );
 
   useEffect(() => {
@@ -100,15 +104,29 @@ const SiteEngHome = ({navigation}) => {
     }
   }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   const axios = require('axios').default;
 
   return (
     <SafeAreaView>
       {orderDetails}
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView
+        style={{backgroundColor: 'white'}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.homeHeader}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Image style={styles.burgerMenu} source={require('../../assets/images/Burger.png')} />
+            <Image
+              style={styles.burgerMenu}
+              source={require('../../assets/images/Burger.png')}
+            />
           </TouchableOpacity>
 
           <Text style={styles.header}>Hello, {username} </Text>
@@ -118,12 +136,17 @@ const SiteEngHome = ({navigation}) => {
             </Text>
           </View> */}
         </View>
-        
+
         <View style={styles.taskBoxTextContainer}>
-          <Image style={styles.taskImg} source={require('../../assets/images/tasks.png')} />
+          <Image
+            style={styles.taskImg}
+            source={require('../../assets/images/tasks.png')}
+          />
           <View>
-          <Text style={styles.taskBoxText}>Contact project manager in case </Text>
-          <Text style={styles.taskBoxText}>of any queries.</Text>
+            <Text style={styles.taskBoxText}>
+              Contact project manager in{'    '}
+            </Text>
+            <Text style={styles.taskBoxText}>case of any queries.</Text>
             {/* <Text
               style={[styles.taskBoxText, {textDecorationLine: 'underline'}]}>
               View Details
@@ -159,7 +182,9 @@ const SiteEngHome = ({navigation}) => {
                 },
               ]}>
               <View style={styles.cardContent}>
-                <Text style={[styles.lableText,{marginBottom:5}]}>{projectInfo.project_id}</Text>
+                <Text style={[styles.lableText, {marginBottom: 5}]}>
+                  {projectInfo.project_id}
+                </Text>
                 <Text style={styles.infoText}>{projectInfo.project_name}</Text>
               </View>
               <TouchableOpacity
@@ -173,15 +198,22 @@ const SiteEngHome = ({navigation}) => {
                     userName: username,
                   })
                 }>
-                <Text style={{fontSize: 14, color: 'black', fontFamily: 'Gilroy-SemiBold'}}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: 'black',
+                    fontFamily: 'Gilroy-SemiBold',
+                  }}>
                   Order Materials
                 </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.divCardContent}>
               <View style={styles.cardContent}>
-                <Text style={[styles.lableText,{marginBottom:5}]}>Location</Text>
-                <Text style={[styles.infoText, {width: windowWidth / 1.4 }]}>
+                <Text style={[styles.lableText, {marginBottom: 5}]}>
+                  Location
+                </Text>
+                <Text style={[styles.infoText, {width: windowWidth / 1.4}]}>
                   {projectInfo.location}
                 </Text>
               </View>
@@ -219,33 +251,33 @@ const SiteEngHome = ({navigation}) => {
               <TouchableOpacity
                 title="orderMaterials"
                 style={styles.orderMaterials}
-                onPress={
-                  () => {
-                    axios({
-                      method: 'get',
-                      url: `https://94.237.65.99:4000/getrequestsbyid?_id=${requestsInfo._id}`,
-                    }).then(response => {
-                      console.log(response.data.Requests);
-                      setOrderDerails();
-                      setOrderDerails(
-                        <OrderDetailsModal
-                          projectId={response.data.Requests.project_id}
-                          projectName={response.data.Requests.project_name}
-                          projectStage={response.data.Requests.project_stage}
-                          materialCategory={response.data.Requests.material_category}
-                          status={response.data.Requests.status}
-                          materials={response.data.Requests.materials}
-                          dueDate={response.data.Requests.due_date}
-                          approver={response.data.Requests.approved_by}
-                          matDesc={response.data.Requests.material_description}
-                          purpose={response.data.Requests.purpose}
-                          priority={response.data.Requests.priority}
-                          matCat={response.data.Requests.material_category}
-                        />
-                      );
-                    });
-                  }
-                }>
+                onPress={() => {
+                  axios({
+                    method: 'get',
+                    url: `https://94.237.65.99:4000/getrequestsbyid?_id=${requestsInfo._id}`,
+                  }).then(response => {
+                    console.log(response.data.Requests);
+                    setOrderDerails();
+                    setOrderDerails(
+                      <OrderDetailsModal
+                        projectId={response.data.Requests.project_id}
+                        projectName={response.data.Requests.project_name}
+                        projectStage={response.data.Requests.project_stage}
+                        materialCategory={
+                          response.data.Requests.material_category
+                        }
+                        status={response.data.Requests.status}
+                        materials={response.data.Requests.materials}
+                        dueDate={response.data.Requests.due_date}
+                        approver={response.data.Requests.approved_by}
+                        matDesc={response.data.Requests.material_description}
+                        purpose={response.data.Requests.purpose}
+                        priority={response.data.Requests.priority}
+                        matCat={response.data.Requests.material_category}
+                      />,
+                    );
+                  });
+                }}>
                 <Text style={{fontSize: 15, color: 'black'}}>View Details</Text>
               </TouchableOpacity>
             </View>
@@ -302,6 +334,7 @@ const styles = StyleSheet.create({
     color: 'black',
     padding: 5,
     fontFamily: 'Gilroy-Medium',
+    fontSize: 16,
   },
   taskBoxTextContainer: {
     backgroundColor: '#fff5f5',

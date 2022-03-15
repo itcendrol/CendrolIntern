@@ -9,7 +9,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  RefreshControl,
   View,
   Image,
   Dimensions,
@@ -17,6 +17,10 @@ import {
 } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 function AllRequests() {
   const [allRequests, setAllRequests] = useState([]);
@@ -43,10 +47,21 @@ function AllRequests() {
     }
   }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []); 
+
   return (
     <SafeAreaView>
       {orderDetails}
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView
+        style={{backgroundColor: 'white'}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         {allRequests.map(requestsInfo => (
           <View style={styles.cards} key={requestsInfo._id}>
             <View
@@ -91,9 +106,7 @@ function AllRequests() {
                     );
                   });
                 }}>
-                <Text style={{fontSize: 15, color: 'black'}}>
-                  View Details
-                </Text>
+                <Text style={{fontSize: 15, color: 'black'}}>View Details</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.divCardContent}>

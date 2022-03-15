@@ -243,9 +243,9 @@ function OrderMaterials(props, {navigation}) {
                 props.navigation.goBack(null)
               }}
               title="sendOrder"
-              style={styles.loginButton}>
-              <Text style={[styles.text, {fontSize: 15, color: 'black'}]}>
-                Ok
+              style={[styles.loginButton,{width: windowWidth / 1.5}]}>
+              <Text style={[styles.text, {fontSize: 16, color: 'black'}]}>
+                Go Back
               </Text>
             </TouchableOpacity>
           </View>
@@ -418,14 +418,14 @@ function OrderMaterials(props, {navigation}) {
               onChange={e => setDesc(e.nativeEvent.text)}
             />
           </View>
-          <View style={{flexDirection: 'row'}}>
-            <View>
+          <View style={{flexDirection: 'row', width: windowWidth / 1.2}}>
+            <View style={{width: windowWidth / 2.4}}>
               <Text style={[styles.text, {paddingLeft: 15}]}>Due Date</Text>
               <TouchableOpacity
                 style={[
                   styles.inputBorder,
                   {
-                    width: windowWidth / 2.75,
+                    width: windowWidth / 2.7,
                     flexDirection: 'row',
                     alignSelf: 'center',
                   },
@@ -458,7 +458,7 @@ function OrderMaterials(props, {navigation}) {
                 style={[
                   styles.inputBorder,
                   {
-                    width: windowWidth / 2.75,
+                    width: windowWidth / 2.8,
                     paddingLeft: 2,
                     borderColor: priorityValid,
                   },
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 5,
     margin: 10,
   },
   lableText: {
@@ -630,10 +630,16 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
 
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)'
+  },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
@@ -644,23 +650,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: windowWidth / 1.1,
+    width: windowWidth / 1.2,
   },
   modalText: {
     marginBottom: 25,
-    textAlign: 'center',
+    textAlign: 'left',
     color: 'black',
+    fontFamily: 'Gilroy-Bold',
+    fontSize: 20,
   },
-
   successImg: {
     width: 60,
     height: 60,
     marginBottom: 15,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
   },
 });

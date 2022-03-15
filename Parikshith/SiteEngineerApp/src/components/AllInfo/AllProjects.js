@@ -9,7 +9,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  RefreshControl,
   View,
   Image,
   Dimensions,
@@ -17,6 +17,10 @@ import {
 } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 function AllProjects({navigation}) {
   const [allProjects, setAllProjects] = useState([]);
@@ -42,9 +46,20 @@ function AllProjects({navigation}) {
     }
   }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <SafeAreaView>
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView
+        style={{backgroundColor: 'white'}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         {allProjects.map(projectInfo => (
           <View style={styles.cards} key={projectInfo._id}>
             {/* {console.log(projectInfo._id)} */}

@@ -11,8 +11,8 @@ const Drawer = createDrawerNavigator();
 
 function DrawerNav() {
   return (
-      <Drawer.Navigator initialRouteName="SiteEngHome">
-        <Drawer.Screen options={{headerShown: false}} name="SiteEngHome" component={SiteEngHome} />
+      <Drawer.Navigator initialRouteName="HomeScreen">
+        <Drawer.Screen options={{headerShown: false}} name="HomeScreen" component={SiteEngHome} />
         <Drawer.Screen options={{headerShown: false}} name="Logout" component={Logout}/>
         {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
       </Drawer.Navigator>

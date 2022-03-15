@@ -38,202 +38,194 @@ function OrderDetailsModal(props) {
   }, []);
 
   return (
-    <SafeAreaView>
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}>
-        <ScrollView>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              {/* Modal View */} 
-              <View style={styles.closeBtnDiv}>
-                <TouchableOpacity onPress={()=>setModalVisible(false)}>
-                  <Image
-                    style={[styles.closeBtn,{height:15, width:15}]}
-                    source={require('../../assets/images/closeBtn.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.header}>
-                <Text
-                  style={[
-                    styles.infoText,
-                    {fontFamily: 'Gilroy-Bold', fontSize: 22},
-                  ]}>
-                  Order Details
+    <Modal
+      animationType="slide"
+      transparent={false}
+      visible={modalVisible}
+      onRequestClose={() => {
+        setModalVisible(false);
+      }}>
+      <ScrollView>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {/* Modal View */}
+            <View style={styles.closeBtnDiv}>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Image
+                  style={[styles.closeBtn, {height: 15, width: 15}]}
+                  source={require('../../assets/images/closeBtn.png')}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.header}>
+              <Text
+                style={[
+                  styles.infoText,
+                  {fontFamily: 'Gilroy-Bold', fontSize: 22},
+                ]}>
+                Order Details
+              </Text>
+              <Text
+                style={[
+                  styles.infoText,
+                  {
+                    fontSize: 10,
+                    backgroundColor: priorityColor,
+                    marginLeft: 20,
+                    padding: 8,
+                    borderRadius: 5,
+                    color: 'white',
+                  },
+                ]}>
+                {props.priority + ' Priority'}
+              </Text>
+            </View>
+            <View style={styles.projectInfo}>
+              <View style={styles.ProjectInfoDivs}>
+                <Text style={[styles.text, styles.lableText]}>Project ID</Text>
+                <Text style={[styles.text, styles.infoText]}>
+                  {props.projectId}
                 </Text>
+              </View>
+              <View style={styles.ProjectInfoDivs}>
+                <Text style={[styles.text, styles.lableText]}>
+                  Project Name
+                </Text>
+                <Text style={[styles.text, styles.infoText]}>
+                  {props.projectName}
+                </Text>
+              </View>
+              <View style={styles.ProjectInfoDivs}>
+                <Text style={[styles.text, styles.lableText]}>
+                  Project Stage
+                </Text>
+                <Text style={[styles.text, styles.infoText]}>
+                  {props.projectStage}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.matCatStat}>
+              <View style={styles.matCatDiv}>
+                <Text style={styles.lableText}>Material Category</Text>
+                <Text style={styles.infoText}>{props.matCat}</Text>
+              </View>
+              <View style={styles.matStatDiv}>
+                <Text style={styles.lableText}>Status</Text>
+                <Text style={styles.infoText}>{props.status}</Text>
+              </View>
+            </View>
+            <View style={styles.materialTable}>
+              <View style={styles.materialTableLabels}>
                 <Text
                   style={[
-                    styles.infoText,
+                    styles.lableText,
                     {
-                      fontSize: 10,
-                      backgroundColor: priorityColor,
-                      marginLeft: 20,
-                      padding: 8,
-                      borderRadius: 5,
-                      color: 'white',
+                      color: 'black',
+                      width: windowWidth / 3,
+                      alignSelf: 'center',
                     },
                   ]}>
-                  {props.priority + ' Priority'}
+                  Material Name
                 </Text>
-              </View>
-              <View style={styles.projectInfo}>
-                <View style={styles.ProjectInfoDivs}>
-                  <Text style={[styles.text, styles.lableText]}>
-                    Project ID
-                  </Text>
-                  <Text style={[styles.text, styles.infoText]}>
-                    {props.projectId}
-                  </Text>
-                </View>
-                <View style={styles.ProjectInfoDivs}>
-                  <Text style={[styles.text, styles.lableText]}>
-                    Project Name
-                  </Text>
-                  <Text style={[styles.text, styles.infoText]}>
-                    {props.projectName}
-                  </Text>
-                </View>
-                <View style={styles.ProjectInfoDivs}>
-                  <Text style={[styles.text, styles.lableText]}>
-                    Project Stage
-                  </Text>
-                  <Text style={[styles.text, styles.infoText]}>
-                    {props.projectStage}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.matCatStat}>
-                <View style={styles.matCatDiv}>
-                  <Text style={styles.lableText}>Material Category</Text>
-                  <Text style={styles.infoText}>{props.matCat}</Text>
-                </View>
-                <View style={styles.matStatDiv}>
-                  <Text style={styles.lableText}>Status</Text>
-                  <Text style={styles.infoText}>{props.status}</Text>
-                </View>
-              </View>
-              <View style={styles.materialTable}>
-                <View style={styles.materialTableLabels}>
-                  <Text
-                    style={[
-                      styles.lableText,
-                      {
-                        color: 'black',
-                        width: windowWidth / 3,
-                        alignSelf: 'center',
-                      },
-                    ]}>
-                    Material Name
-                  </Text>
-                  <Text
-                    style={[
-                      styles.lableText,
-                      {
-                        color: 'black',
-                        width: windowWidth / 6,
-                        alignSelf: 'center',
-                      },
-                    ]}>
-                    Qty
-                  </Text>
-                  <Text
-                    style={[
-                      styles.lableText,
-                      {
-                        color: 'black',
-                        width: windowWidth / 5,
-                        alignSelf: 'center',
-                      },
-                    ]}>
-                    Specs
-                  </Text>
-                </View>
-                {props.materials.map(matData => (
-                  // console.log('testing data',matData.material_name);
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text
-                      style={[
-                        styles.infoText,
-                        {width: windowWidth / 4, margin: 15},
-                      ]}>
-                      {matData.material_name}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.infoText,
-                        {width: windowWidth / 6, margin: 15},
-                      ]}>
-                      {matData.quantity}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.infoText,
-                        {width: windowWidth / 5, margin: 15},
-                      ]}>
-                      {matData.uom}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-              <View style={styles.dateAndApprover}>
-                <View style={styles.dueDate}>
-                  <Text style={styles.lableText}>Due Date</Text>
-                  <Text style={styles.infoText}>03/02/2022</Text>
-                </View>
-                <View style={styles.approver}>
-                  <Text style={styles.lableText}>Approver</Text>
-                  <Text style={styles.infoText}>CH Sunil Kumar</Text>
-                </View>
-              </View>
-              <View style={styles.matDescPurp}>
-                <Text style={styles.lableText}>Material Description</Text>
                 <Text
                   style={[
-                    styles.infoText,
-                    {fontFamily: 'Gilroy-Medium', marginTop: 10},
+                    styles.lableText,
+                    {
+                      color: 'black',
+                      width: windowWidth / 6,
+                      alignSelf: 'center',
+                    },
                   ]}>
-                  {props.matDesc}
+                  Qty
                 </Text>
-              </View>
-              <View style={[styles.matDescPurp, {borderBottomWidth: 0}]}>
-                <Text style={styles.lableText}>Purpose</Text>
                 <Text
                   style={[
-                    styles.infoText,
-                    {fontFamily: 'Gilroy-Medium', marginTop: 10},
+                    styles.lableText,
+                    {
+                      color: 'black',
+                      width: windowWidth / 5,
+                      alignSelf: 'center',
+                    },
                   ]}>
-                  {props.purpose}
+                  Specs
                 </Text>
               </View>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity
-                  style={[styles.buttons, {backgroundColor: '#F4F4F4'}]}>
-                  <Text style={[styles.infoText, {fontSize: 15}]}>
-                    Reconcile
+              {props.materials.map(matData => (
+                // console.log('testing data',matData.material_name);
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={[
+                      styles.infoText,
+                      {width: windowWidth / 4, margin: 15},
+                    ]}>
+                    {matData.material_name}
                   </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttons}>
-                  <Text style={[styles.infoText, {fontSize: 15}]}>
-                    Received
+                  <Text
+                    style={[
+                      styles.infoText,
+                      {width: windowWidth / 6, margin: 15},
+                    ]}>
+                    {matData.quantity}
                   </Text>
-                </TouchableOpacity>
-              </View>
-              {/* Modal View end */}
+                  <Text
+                    style={[
+                      styles.infoText,
+                      {width: windowWidth / 5, margin: 15},
+                    ]}>
+                    {matData.uom}
+                  </Text>
+                </View>
+              ))}
             </View>
+            <View style={styles.dateAndApprover}>
+              <View style={styles.dueDate}>
+                <Text style={styles.lableText}>Due Date</Text>
+                <Text style={styles.infoText}>03/02/2022</Text>
+              </View>
+              <View style={styles.approver}>
+                <Text style={styles.lableText}>Approver</Text>
+                <Text style={styles.infoText}>CH Sunil Kumar</Text>
+              </View>
+            </View>
+            <View style={styles.matDescPurp}>
+              <Text style={styles.lableText}>Material Description</Text>
+              <Text
+                style={[
+                  styles.infoText,
+                  {fontFamily: 'Gilroy-Medium', marginTop: 10},
+                ]}>
+                {props.matDesc}
+              </Text>
+            </View>
+            <View style={[styles.matDescPurp, {borderBottomWidth: 0}]}>
+              <Text style={styles.lableText}>Purpose</Text>
+              <Text
+                style={[
+                  styles.infoText,
+                  {fontFamily: 'Gilroy-Medium', marginTop: 10},
+                ]}>
+                {props.purpose}
+              </Text>
+            </View>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TouchableOpacity
+                style={[styles.buttons, {backgroundColor: '#F4F4F4'}]}>
+                <Text style={[styles.infoText, {fontSize: 15}]}>Reconcile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttons}>
+                <Text style={[styles.infoText, {fontSize: 15}]}>Received</Text>
+              </TouchableOpacity>
+            </View>
+            {/* Modal View end */}
           </View>
-        </ScrollView>
-      </Modal>
-    </SafeAreaView>
+        </View>
+      </ScrollView>
+    </Modal>
   );
 }
 export default OrderDetailsModal;
@@ -261,6 +253,13 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     textAlign: 'center',
     color: 'black',
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalButtonClose: {
     backgroundColor: 'red',
