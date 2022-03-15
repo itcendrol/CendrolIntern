@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 import {
   SafeAreaView,
@@ -14,6 +15,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
+  BackHandler,
 } from 'react-native';
 
 import OrderDetailsModal from '../OrderDetailsModal/OrderDetailsModal';
@@ -25,6 +27,23 @@ const SiteEngHome = ({navigation}) => {
   const [allProjects, setAllProjects] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
   const [orderDetails, setOrderDerails] = useState();
+
+  function handleBack(){
+    BackHandler.exitApp();
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
   useEffect(() => {
     const getAsyncStorageData = async () => {
@@ -93,23 +112,24 @@ const SiteEngHome = ({navigation}) => {
           </TouchableOpacity>
 
           <Text style={styles.header}>Hello, {username} </Text>
-          <View style={styles.notifCircle}>
+          {/* <View style={styles.notifCircle}>
             <Text>
               <Icon style={styles.notifIcon} name="notifications-outline" />
             </Text>
-          </View>
+          </View> */}
         </View>
         
         <View style={styles.taskBoxTextContainer}>
           <Image style={styles.taskImg} source={require('../../assets/images/tasks.png')} />
           <View>
-            <Text style={styles.taskBoxText}>You have 5 tasks today.</Text>
-            <Text
+          <Text style={styles.taskBoxText}>Contact project manager in case </Text>
+          <Text style={styles.taskBoxText}>of any queries.</Text>
+            {/* <Text
               style={[styles.taskBoxText, {textDecorationLine: 'underline'}]}>
               View Details
-            </Text>
+            </Text> */}
           </View>
-          <Image style={styles.xImg} source={require('../../assets/images/xIcon.png')} />
+          {/* <Image style={styles.xImg} source={require('../../assets/images/xIcon.png')} /> */}
         </View>
 
         <View style={styles.header2}>
@@ -250,7 +270,7 @@ export default SiteEngHome;
 
 const styles = StyleSheet.create({
   homeHeader: {
-    marginTop: 15,
+    marginTop: 35,
     margin: 15,
     display: 'flex',
     flexDirection: 'row',
@@ -260,13 +280,14 @@ const styles = StyleSheet.create({
 
   burgerMenu: {
     width: 28,
-    height: 22,
+    height: 22.5,
   },
 
   header: {
     fontSize: 20,
     fontFamily: 'Gilroy-Bold',
     color: 'black',
+    alignItems: 'center',
   },
   notifCircle: {
     borderRadius: 25,

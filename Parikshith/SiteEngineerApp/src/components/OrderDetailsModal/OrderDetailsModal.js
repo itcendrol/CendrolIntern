@@ -44,7 +44,7 @@ function OrderDetailsModal(props) {
         transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setModalVisible(false);
         }}>
         <ScrollView>
           <View style={styles.centeredView}>

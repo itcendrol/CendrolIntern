@@ -14,7 +14,6 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
-  Button,
 } from 'react-native';
 // import {TextInput} from 'react-native-gesture-handler';
 import {Checkbox} from 'react-native-paper';
@@ -39,6 +38,14 @@ const Login = ({navigation}) => {
   const [modalText, setModalText] = useState('');
 
   const axios = require('axios').default;
+
+  useEffect(() => {
+    AsyncStorage.getItem('Name').then(item => {
+      if (item !== null) {
+        navigation.navigate('Home');
+      }
+    });
+  }, []);
 
   function emailInput() {
     setEmailLabel(styles.lablesOnFocus);
@@ -120,7 +127,10 @@ const Login = ({navigation}) => {
               </View>
             </View>
           </Modal>
-          <Image style={styles.cendrolImg} source={require('../../assets/images/bgimg.jpg')} />
+          <Image
+            style={styles.cendrolImg}
+            source={require('../../assets/images/bgimg.jpg')}
+          />
           <View style={styles.loginCard}>
             <View style={styles.infoText}>
               <Text style={styles.headText}>Sign in to continue</Text>
@@ -128,16 +138,26 @@ const Login = ({navigation}) => {
               <Text style={styles.subText}>&amp; much more</Text>
             </View>
             <View style={[styles.textInput, {borderColor: emailInputBorder}]}>
-              <Text style={[emailLabel,styles.inTextBox,{fontSize:emailLabelSize}]}>Email</Text>
+              <Text
+                style={[
+                  emailLabel,
+                  styles.inTextBox,
+                  {fontSize: emailLabelSize},
+                ]}>
+                Email
+              </Text>
               <TextInput
                 color="black"
                 onFocus={() => emailInput()}
-                style={[styles.input,{fontFamily: 'Gilroy-SemiBold'}]}
+                style={[styles.input, {fontFamily: 'Gilroy-SemiBold'}]}
                 onChange={e => validateEmail(e)}
               />
             </View>
             {emailError ? null : (
-              <Text style={{color: 'red', alignSelf: 'flex-start', marginTop: 10}}>Enter valid Email ID</Text>
+              <Text
+                style={{color: 'red', alignSelf: 'flex-start', marginTop: 10}}>
+                Enter valid Email ID
+              </Text>
             )}
 
             <View
@@ -145,7 +165,14 @@ const Login = ({navigation}) => {
                 styles.textInput,
                 {borderColor: pswdInputBorder, marginBottom: 15},
               ]}>
-              <Text style={[pswdLabel,styles.inTextBox,{fontSize:pswdLabelSize}]}>Password</Text>
+              <Text
+                style={[
+                  pswdLabel,
+                  styles.inTextBox,
+                  {fontSize: pswdLabelSize},
+                ]}>
+                Password
+              </Text>
               <View
                 style={{
                   width: windowWidth / 1.3,
@@ -155,7 +182,10 @@ const Login = ({navigation}) => {
                 <TextInput
                   color="black"
                   onFocus={() => pswdInput()}
-                  style={[styles.input, {width: 250, fontFamily: 'Gilroy-SemiBold'}]}
+                  style={[
+                    styles.input,
+                    {width: 250, fontFamily: 'Gilroy-SemiBold'},
+                  ]}
                   onChange={e => setPswd(e.nativeEvent.text)}
                   secureTextEntry={hidePass ? true : false}></TextInput>
                 <Icon
@@ -186,7 +216,14 @@ const Login = ({navigation}) => {
               title="Login"
               style={styles.loginButton}
               onPress={() => submitForm()}>
-              <Text style={{fontSize: 15, fontFamily:'Gilroy-SemiBold', color: 'black'}}>Login</Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: 'Gilroy-SemiBold',
+                  color: 'black',
+                }}>
+                Login
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -241,7 +278,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     borderWidth: 0.6,
     borderRadius: 8,
-    borderColor:'#969696',
+    borderColor: '#969696',
     height: 60,
     width: windowWidth / 1.2,
     alignContent: 'flex-start',
@@ -323,7 +360,7 @@ const styles = StyleSheet.create({
     width: windowWidth / 2,
     borderRadius: 5,
   },
-  inTextBox:{
+  inTextBox: {
     fontFamily: 'Gilroy-Medium',
-  }
+  },
 });

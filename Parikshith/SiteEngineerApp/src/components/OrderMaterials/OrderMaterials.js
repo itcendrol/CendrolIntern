@@ -42,6 +42,7 @@ function OrderMaterials(props, {navigation}) {
   const [dueDateValid, setDueDateValid] = useState('#969696');
   const [approverValid, setApproverValid] = useState('#969696');
   const [purposeValid, setPurposeValid] = useState('#969696');
+  const [priorityValid, setPriorityValid] = useState('#969696');
 
   const axios = require('axios').default;
 
@@ -147,7 +148,10 @@ function OrderMaterials(props, {navigation}) {
     if (
       JSON.stringify(dueDate) === '""' ||
       purpose === '' ||
-      selectedApprover === '0'
+      selectedApprover === '0' ||
+      priority === '0' ||
+      selectedApprover === "" ||
+      priority === ""
     ) {
       if (JSON.stringify(dueDate) === '""') {
         setDueDateValid('red');
@@ -155,15 +159,19 @@ function OrderMaterials(props, {navigation}) {
       if (purpose === '') {
         setPurposeValid('red');
       }
-      if (approver === '0') {
+      console.log(approver);
+      if (selectedApprover === '0' || selectedApprover === "") {
         setApproverValid('red');
+      }
+      if (priority === '0' || priority === "") {
+        setPriorityValid('red');
       }
       flag = 0;
     }
 
     function validateMatSpecData() {
       materials.map(materialUom => {
-        if (materialUom.uom === '' || materialUom.material_name === "0") {
+        if (materialUom.uom === '' || materialUom.material_name === '0') {
           ToastAndroid.show(
             'Enter details for all materials',
             ToastAndroid.CENTER,
@@ -173,9 +181,9 @@ function OrderMaterials(props, {navigation}) {
           return false;
         }
       });
-      if (flag === 1){
+      if (flag === 1) {
         return true;
-      }else{
+      } else {
         return false;
       }
     }
@@ -220,7 +228,7 @@ function OrderMaterials(props, {navigation}) {
         visible={modalVisible}
         onRequestClose={() => {
           // navigation.navigate('Home');
-          setModalVisible(false);
+          // setModalVisible(false);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -232,6 +240,7 @@ function OrderMaterials(props, {navigation}) {
             <TouchableOpacity
               onPress={() => {
                 // setModalVisible(false);
+                props.navigation.goBack(null)
               }}
               title="sendOrder"
               style={styles.loginButton}>
@@ -448,7 +457,11 @@ function OrderMaterials(props, {navigation}) {
               <View
                 style={[
                   styles.inputBorder,
-                  {width: windowWidth / 2.75, paddingLeft: 2},
+                  {
+                    width: windowWidth / 2.75,
+                    paddingLeft: 2,
+                    borderColor: priorityValid,
+                  },
                 ]}>
                 <Picker
                   style={{paddingTop: 40, alignItems: 'center', color: 'black'}}
@@ -456,12 +469,16 @@ function OrderMaterials(props, {navigation}) {
                   selectedValue={priority}
                   dropdownIconColor="#FCC314"
                   dropdownIconRippleColor="#FCC314"
-                  onValueChange={(itemValue, itemIndex) =>
-                    setPriority(itemValue)
-                  }>
-                  <Picker.Item label="Low" value="Low" />
-                  <Picker.Item label="Medium" value="Medium" />
+                  onValueChange={(itemValue, itemIndex) => {
+                    // itemValue === '0'
+                    //   ? setPriorityValid('red')
+                    //   : setPriorityValid('#969696');
+                    setPriority(itemValue);
+                  }}>
+                  <Picker.Item label="Select" value="0" />
                   <Picker.Item label="High" value="High" />
+                  <Picker.Item label="Medium" value="Medium" />
+                  <Picker.Item label="Low" value="Low" />
                 </Picker>
               </View>
             </View>
@@ -478,7 +495,9 @@ function OrderMaterials(props, {navigation}) {
                 dropdownIconRippleColor="#FCC314"
                 selectedValue={selectedApprover}
                 onValueChange={(itemValue, itemIndex) => {
-                  itemValue === "0" ? setApproverValid('red') : setApproverValid('#969696');
+                  // itemValue === '0'
+                  //   ? setApproverValid('red')
+                  //   : setApproverValid('#969696');
                   setSelectedApprover(itemValue);
                 }}>
                 <Picker.Item label="Select Approver" value="0" />
