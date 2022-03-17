@@ -50,6 +50,24 @@ function AllProjects({navigation}) {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    setAllProjects([]);
+    getApiData();
+    async function getApiData() {
+      try {
+        const Uname = await AsyncStorage.getItem('Name');
+        if (Uname !== null) {
+          axios({
+            method: 'get',
+            url: `https://94.237.65.99:4000/SEprojects?site_engineer=${Uname}`,
+          }).then(response => {
+            // console.log(response.data.projects);
+            setAllProjects(response.data.projects);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
     wait(2000).then(() => setRefreshing(false));
   }, []);
 

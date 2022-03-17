@@ -5,17 +5,25 @@ import {
   Modal,
   StyleSheet,
   Text,
-  useColorScheme,
+  ToastAndroid,
   View,
   Image,
   Dimensions,
   TouchableOpacity,
   TextInput,
   Button,
+  Alert,
 } from 'react-native';
+import Reconcilation from '../Reconcilation/Reconcilation';
+
+const axios = require('axios').default;
+
 function OrderDetailsModal(props) {
+  console.log('modalprops:', props._id);
   const [modalVisible, setModalVisible] = useState(true);
   const [priorityColor, setPriorityColor] = useState('#969696');
+  const [reconcileVisible, setReconcileVisible] = useState(false);
+  const [modalHeader, setModalHeader] = useState('');
 
   useEffect(() => {
     setModalVisible(true);
@@ -37,6 +45,34 @@ function OrderDetailsModal(props) {
     setPriorityColor(priorityColor);
   }, []);
 
+  function setReceivedStatus() {
+    console.log('Setting Status for ID ', props._id);
+    axios
+      .post(`https://94.237.65.99:4000/requeststatus?_id=${props._id}&statusvalue=Material Received`)
+      .then(function (response) {
+        setModalVisible(false);
+        ToastAndroid.show('Drag down to refresh data', ToastAndroid.CENTER);
+        console.log(response.data.status);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  async function setReceived() {
+    Alert.alert('Are you sure?', 'Set status to received', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => setReceivedStatus(),
+      },
+    ]);
+  }
+
   return (
     <Modal
       animationType="slide"
@@ -45,6 +81,9 @@ function OrderDetailsModal(props) {
       onRequestClose={() => {
         setModalVisible(false);
       }}>
+      {reconcileVisible && (
+        <Reconcilation materials={props.materials} header={modalHeader} req_id={props._id} />
+      )}
       <ScrollView>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -214,10 +253,18 @@ function OrderDetailsModal(props) {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity
+                onPress={() => {
+                  setModalHeader('Reconcile');
+                  setReconcileVisible(true);
+                }}
                 style={[styles.buttons, {backgroundColor: '#F4F4F4'}]}>
                 <Text style={[styles.infoText, {fontSize: 15}]}>Reconcile</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.buttons}>
+              <TouchableOpacity
+                onPress={() => {
+                  setReceived();
+                }}
+                style={styles.buttons}>
                 <Text style={[styles.infoText, {fontSize: 15}]}>Received</Text>
               </TouchableOpacity>
             </View>
@@ -254,7 +301,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
   },
-
   centeredView: {
     flex: 1,
     justifyContent: 'center',

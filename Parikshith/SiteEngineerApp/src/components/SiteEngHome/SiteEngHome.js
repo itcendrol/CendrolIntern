@@ -108,6 +108,42 @@ const SiteEngHome = ({navigation}) => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    setAllProjects([]);
+    setAllRequests([]);
+    getRequestData();
+    async function getRequestData() {
+      try {
+        const Uname = await AsyncStorage.getItem('Name');
+        if (Uname !== null) {
+          axios({
+            method: 'get',
+            url: `https://94.237.65.99:4000/SErequests?site_engineer=${Uname}`,
+          }).then(response => {
+            // console.log(response.data.requests);
+            setAllRequests(response.data.requests);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getProjectsData();
+    async function getProjectsData() {
+      try {
+        const Uname = await AsyncStorage.getItem('Name');
+        if (Uname !== null) {
+          axios({
+            method: 'get',
+            url: `https://94.237.65.99:4000/SEprojects?site_engineer=${Uname}`,
+          }).then(response => {
+            // console.log(response.data.projects);
+            setAllProjects(response.data.projects);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
@@ -260,6 +296,7 @@ const SiteEngHome = ({navigation}) => {
                     setOrderDerails();
                     setOrderDerails(
                       <OrderDetailsModal
+                        _id={response.data.Requests._id}
                         projectId={response.data.Requests.project_id}
                         projectName={response.data.Requests.project_name}
                         projectStage={response.data.Requests.project_stage}
@@ -288,7 +325,7 @@ const SiteEngHome = ({navigation}) => {
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.lableText}>Status</Text>
-                <Text style={styles.infoText}>{requestsInfo.status}</Text>
+                <Text style={[styles.infoText,{width: windowWidth/3}]}>{requestsInfo.status}</Text>
               </View>
             </View>
           </View>
