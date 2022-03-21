@@ -15,29 +15,45 @@ import {
 } from 'react-native';
 
 function MaterialsInput(props) {
-    console.log('findKey',props.counter)
 
-    useEffect(()=>{
-        props.materialInfo(props.counter, props.materialName, props.materialQty);
-    },[])
+  const [validQty, setValidQty] = useState('red')
+
+  console.log('findKey', props.counter);
+
+  useEffect(() => {
+    props.materialInfo(props.counter, props.materialName, props.materialQty);
+  }, []);
 
   return (
     <View style={styles.row}>
       <View>
         <Text style={styles.lableText}>Material Name</Text>
         <Text
-          style={[styles.infoText, styles.inputBorder, {width: 175}]}>
+          style={[
+            styles.infoText,
+            styles.inputBorder,
+            {width: 165, marginRight: 10},
+          ]}>
           {props.materialName}
         </Text>
       </View>
       <View>
         <Text style={styles.lableText}>Material Received</Text>
         <TextInput
+          keyboardType="number-pad"
+          value = {props.materialQty}
+          // onChangeText={text => text.isNan() ? setValidQty('red') : setValidQty('')}
+          // onChangeText={text => console.log(text)}
           onChange={e => {
-            props.materialInfo(props.counter, props.materialName, e.nativeEvent.text);
-          }}
+            props.materialInfo(
+              props.counter,
+              props.materialName,
+              e.nativeEvent.text,
+            );
+          }
+        }
           style={[styles.infoText, styles.inputBorder, {width: 135}]}>
-          {props.materialQty}
+          {/* {parseInt(props.materialQty)} */}
         </TextInput>
       </View>
     </View>

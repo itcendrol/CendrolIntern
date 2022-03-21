@@ -257,7 +257,7 @@ function OrderDetailsModal(props) {
                   setModalHeader('Reconcile');
                   setReconcileVisible(true);
                 }}
-                style={[styles.buttons, {backgroundColor: '#F4F4F4'}]}>
+                style={[styles.buttons, {backgroundColor: '#F8F8F8'}]}>
                 <Text style={[styles.infoText, {fontSize: 15}]}>Reconcile</Text>
               </TouchableOpacity>
               <TouchableOpacity

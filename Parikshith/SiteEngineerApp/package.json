@@ -22,6 +22,7 @@
     "axios": "^0.26.0",
     "native-base": "^3.3.7",
     "react": "17.0.2",
+    "react-iconly": "^2.2.5",
     "react-native": "0.67.3",
     "react-native-check-box": "^2.1.7",
     "react-native-gesture-handler": "^2.3.0",
