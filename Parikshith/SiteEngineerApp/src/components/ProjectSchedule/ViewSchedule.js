@@ -2,66 +2,71 @@ import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  Modal,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
-  Image,
   Dimensions,
   TouchableOpacity,
-  TextInput,
-  Button,
 } from 'react-native';
 
-function ViewSchedule({navigation}) {
+function ViewSchedule(props, {navigation}) {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    setTasks(props.route.params.tasks);
+  });
+
   return (
     <SafeAreaView style={{backgroundColor: 'white', height: windowHeight}}>
       <ScrollView style={{backgroundColor: 'white', paddingTop: 15}}>
-        <View style={styles.cards}>
-          <View
-            style={[
-              styles.cardContent,
-              {flexDirection: 'row', justifyContent: 'space-between'},
-            ]}>
-            <View
-              style={{
-                width: 10,
-                height: 10,
-                backgroundColor: '#3ADD5E',
-                borderRadius: 100,
-                marginLeft: 5,
-              }}/>
+        {tasks.map(taskName => (
+          <View style={styles.cards}>
             <View
               style={[
                 styles.cardContent,
-                {alignItems: 'flex-start', width: windowWidth / 2.5},
+                {flexDirection: 'row', justifyContent: 'space-between'},
               ]}>
-              <Text style={styles.infoText}>{'Subgrade Work'}</Text>
-            </View>
-            <TouchableOpacity
-              title="orderMaterials"
-              style={styles.viewSchedule}
-                onPress={() =>
-                  navigation.navigate('ViewDetails', {
-                    // projectId: projectInfo.project_id,
-                    // projectName: projectInfo.project_name,
-                    // projectStage: projectInfo.project_stage,
-                    // userName: username,
-                  })
-                }
-            >
-              <Text
+              <View
                 style={{
-                  fontSize: 14,
-                  color: 'black',
-                  fontFamily: 'Gilroy-SemiBold',
-                }}>
-                View Details
-              </Text>
-            </TouchableOpacity>
+                  width: 10,
+                  height: 10,
+                  backgroundColor: '#3ADD5E',
+                  borderRadius: 100,
+                  marginLeft: 5,
+                }}
+              />
+              <View
+                style={[
+                  styles.cardContent,
+                  {alignItems: 'flex-start', width: windowWidth / 2.5},
+                ]}>
+                <Text style={styles.infoText}>{taskName.main_task}</Text>
+              </View>
+              <TouchableOpacity
+                title="orderMaterials"
+                style={styles.viewSchedule}
+                onPress={() =>
+                  props.navigation.navigate('ViewDetails', {
+                    taskDets: taskName.tasks,
+                    main_task: taskName.main_task,
+                    from_date: taskName.from_date,
+                    to_date: taskName.to_date,
+                    total_days: taskName.total_days,
+                    proj_id: props.route.params.proj_id,
+                  })
+                }>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: 'black',
+                    fontFamily: 'Gilroy-SemiBold',
+                  }}>
+                  View Details
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
   infoText: {
     color: 'black',
     fontFamily: 'Gilroy-SemiBold',
-    fontSize: 15,
+    fontSize: 16,
   },
   cards: {
     width: windowWidth / 1.1,

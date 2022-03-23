@@ -22,7 +22,6 @@ function AddMaterial(props) {
 
   return (
     <View style={styles.inputRows}>
-      {/* {console.log('got props: ', props)} */}
       <View style={[styles.inputBorder, {width: windowWidth / 3}]}>
         <Picker
           style={{paddingTop: 40, alignItems: 'center', color: 'black'}}

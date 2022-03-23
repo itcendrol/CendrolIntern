@@ -79,7 +79,6 @@ const Login = ({navigation}) => {
       .then(function (response) {
         AsyncStorage.setItem('email', email);
         AsyncStorage.setItem('Name', response.data.Name);
-        console.log(response.data.status);
         if (emailError && email !== '' && pswd !== '') {
           if (response.data.status === 'success') {
             navigation.navigate('Home');

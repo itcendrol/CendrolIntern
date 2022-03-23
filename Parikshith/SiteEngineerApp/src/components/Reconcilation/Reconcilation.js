@@ -19,7 +19,6 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {NavigationContainer} from '@react-navigation/native';
 
 function Reconcilation(props) {
-    console.log('Recon: ',props);
   const [modalVisible, setModalVisible] = useState(true);
   const [materials, setMaterials] = useState([]);
   //   const [addMaterials, setAddMaterials] = useState([]);

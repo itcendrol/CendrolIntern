@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   ScrollView,
@@ -15,6 +16,28 @@ import {
 } from 'react-native';
 
 function ProjectSchedule({navigation}) {
+  const axios = require('axios').default;
+  const [allSchedules, setAllSchedules] = useState([]);
+
+  useEffect(() => {
+    getApiData();
+    async function getApiData() {
+      try {
+        const Uname = await AsyncStorage.getItem('Name');
+        if (Uname !== null) {
+          axios({
+            method: 'get',
+            url: `https://94.237.65.99:4000/schedulelist?site_engineer=${Uname}`,
+          }).then(response => {
+            setAllSchedules(response.data.Schedule);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, []);
+
   return (
     <SafeAreaView>
       <ScrollView style={{backgroundColor: 'white'}}>
@@ -31,42 +54,44 @@ function ProjectSchedule({navigation}) {
             placeholder="Search by Project Name"
           />
         </View>
-        <View style={styles.cards}>
-          <View
-            style={[
-              styles.cardContent,
-              {flexDirection: 'row', justifyContent: 'space-between'},
-            ]}>
-            <View style={[styles.cardContent,{alignItems: 'flex-start', width: windowWidth/2.4}]}>
-              <Text style={[styles.lableText, {marginBottom: 5}]}>
-                Project Name
-              </Text>
-              <Text style={styles.infoText}>{'Maple Crest'}</Text>
-            </View>
-            <TouchableOpacity
-              title="orderMaterials"
-              style={styles.viewSchedule}
+        {allSchedules.map(ScheduleItem => (
+          <View style={styles.cards}>
+            <View
+              style={[
+                styles.cardContent,
+                {flexDirection: 'row', justifyContent: 'space-between'},
+              ]}>
+              <View
+                style={[
+                  styles.cardContent,
+                  {alignItems: 'flex-start', width: windowWidth / 2.4},
+                ]}>
+                <Text style={[styles.lableText, {marginBottom: 5}]}>
+                  Project Name
+                </Text>
+                <Text style={styles.infoText}>{ScheduleItem.project_name}</Text>
+              </View>
+              <TouchableOpacity
+                title="orderMaterials"
+                style={styles.viewSchedule}
                 onPress={() =>
                   navigation.navigate('ViewSchedule', {
-                //     projectId: projectInfo.project_id,
-                //     projectName: projectInfo.project_name,
-                //     projectStage: projectInfo.project_stage,
-                //     userName: username,
-                  }
-                  )
-                }
-            >
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'black',
-                  fontFamily: 'Gilroy-SemiBold',
-                }}>
-                View Schedule
-              </Text>
-            </TouchableOpacity>
+                    tasks: allSchedules,
+                    proj_id: ScheduleItem.project_id,
+                  })
+                }>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: 'black',
+                    fontFamily: 'Gilroy-SemiBold',
+                  }}>
+                  View Schedule
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

@@ -18,8 +18,6 @@ function MaterialsInput(props) {
 
   const [validQty, setValidQty] = useState('red')
 
-  console.log('findKey', props.counter);
-
   useEffect(() => {
     props.materialInfo(props.counter, props.materialName, props.materialQty);
   }, []);
@@ -42,8 +40,6 @@ function MaterialsInput(props) {
         <TextInput
           keyboardType="number-pad"
           value = {props.materialQty}
-          // onChangeText={text => text.isNan() ? setValidQty('red') : setValidQty('')}
-          // onChangeText={text => console.log(text)}
           onChange={e => {
             props.materialInfo(
               props.counter,

@@ -37,7 +37,6 @@ function AllRequests() {
             method: 'get',
             url: `https://94.237.65.99:4000/SErequests?site_engineer=${Uname}`,
           }).then(response => {
-            console.log(response.data.requests);
             setAllRequests(response.data.requests);
           });
         }
@@ -61,7 +60,6 @@ function AllRequests() {
             method: 'get',
             url: `https://94.237.65.99:4000/SErequests?site_engineer=${Uname}`,
           }).then(response => {
-            console.log(response.data.requests);
             setAllRequests(response.data.requests);
           });
         }
@@ -102,7 +100,6 @@ function AllRequests() {
                     method: 'get',
                     url: `https://94.237.65.99:4000/getrequestsbyid?_id=${requestsInfo._id}`,
                   }).then(response => {
-                    console.log(response.data.Requests);
                     setOrderDerails();
                     setOrderDerails(
                       <OrderDetailsModal

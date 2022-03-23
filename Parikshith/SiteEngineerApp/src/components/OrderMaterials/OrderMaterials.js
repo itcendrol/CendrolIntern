@@ -87,7 +87,6 @@ function OrderMaterials(props, {navigation}) {
         url: `https://94.237.65.99:4000/getmaterialnames?category=${catg}`,
       }).then(response => {
         setMatNamelist(response.data);
-        console.log('got data', response.data.Materials);
       });
     } catch (e) {
       console.log(e);
@@ -95,10 +94,6 @@ function OrderMaterials(props, {navigation}) {
   }
 
   const materialInfo = (materialName, qty, specs) => {
-    // console.log('Index: ',materialCounter);
-    // console.log('MaterialName: ', materialName);
-    // console.log('Qty: ', qty);
-    // console.log('Specs: ', specs);
     const materialArray = materials;
     materialArray.splice(materialCounter, 1, {
       material_name: materialName,
@@ -107,7 +102,6 @@ function OrderMaterials(props, {navigation}) {
     });
     setMaterials([]);
     setMaterials(materialArray);
-    console.log(materialArray);
   };
 
   const [addMaterials, setAddMaterials] = useState([]);
@@ -159,7 +153,6 @@ function OrderMaterials(props, {navigation}) {
       if (purpose === '') {
         setPurposeValid('red');
       }
-      console.log(approver);
       if (selectedApprover === '0' || selectedApprover === "") {
         setApproverValid('red');
       }
@@ -176,7 +169,6 @@ function OrderMaterials(props, {navigation}) {
             'Enter details for all materials',
             ToastAndroid.CENTER,
           );
-          console.log(materialUom.materialName, 'UOM Invalid');
           flag = 0;
           return false;
         }
@@ -210,11 +202,9 @@ function OrderMaterials(props, {navigation}) {
       site_engineer: props.route.params.userName,
     };
     const dataToBeSent = postData;
-    console.log('Data Being Sent: ', dataToBeSent);
     axios
       .post('https://94.237.65.99:4000/addrequests', dataToBeSent)
       .then(function (response) {
-        console.log('Post response: ', response);
         setModalVisible(true);
       });
     // setModalVisible(true);

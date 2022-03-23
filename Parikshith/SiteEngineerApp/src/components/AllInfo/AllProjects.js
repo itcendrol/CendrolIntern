@@ -36,7 +36,6 @@ function AllProjects({navigation}) {
             method: 'get',
             url: `https://94.237.65.99:4000/SEprojects?site_engineer=${Uname}`,
           }).then(response => {
-            // console.log(response.data.projects);
             setAllProjects(response.data.projects);
           });
         }
@@ -60,7 +59,6 @@ function AllProjects({navigation}) {
             method: 'get',
             url: `https://94.237.65.99:4000/SEprojects?site_engineer=${Uname}`,
           }).then(response => {
-            // console.log(response.data.projects);
             setAllProjects(response.data.projects);
           });
         }
@@ -80,7 +78,6 @@ function AllProjects({navigation}) {
         }>
         {allProjects.map(projectInfo => (
           <View style={styles.cards} key={projectInfo._id}>
-            {/* {console.log(projectInfo._id)} */}
             <View
               style={[
                 styles.divCardContent,

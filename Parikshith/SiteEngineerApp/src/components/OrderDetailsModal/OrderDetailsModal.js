@@ -19,7 +19,6 @@ import Reconcilation from '../Reconcilation/Reconcilation';
 const axios = require('axios').default;
 
 function OrderDetailsModal(props) {
-  console.log('modalprops:', props._id);
   const [modalVisible, setModalVisible] = useState(true);
   const [priorityColor, setPriorityColor] = useState('#969696');
   const [reconcileVisible, setReconcileVisible] = useState(false);
@@ -46,13 +45,11 @@ function OrderDetailsModal(props) {
   }, []);
 
   function setReceivedStatus() {
-    console.log('Setting Status for ID ', props._id);
     axios
       .post(`https://94.237.65.99:4000/requeststatus?_id=${props._id}&statusvalue=Material Received`)
       .then(function (response) {
         setModalVisible(false);
         ToastAndroid.show('Drag down to refresh data', ToastAndroid.CENTER);
-        console.log(response.data.status);
       })
       .catch(function (error) {
         console.log(error);
@@ -63,7 +60,6 @@ function OrderDetailsModal(props) {
     Alert.alert('Are you sure?', 'Set status to received', [
       {
         text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
       {
@@ -190,7 +186,6 @@ function OrderDetailsModal(props) {
                 </Text>
               </View>
               {props.materials.map(matData => (
-                // console.log('testing data',matData.material_name);
                 <View
                   style={{
                     flexDirection: 'row',
@@ -305,7 +300,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalButtonClose: {
     backgroundColor: 'red',

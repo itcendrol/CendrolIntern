@@ -18,6 +18,8 @@ import ViewSchedule from './ProjectSchedule/ViewSchedule';
 import DrawerNav from './DrawerNav';
 import ViewDetails from './ProjectSchedule/ViewDetails';
 import OrderMaterials from './OrderMaterials/OrderMaterials';
+import LabourData from './LabourData/LabourData';
+import AddLabourData from './LabourData/AddLabourData';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 const Stack = createNativeStackNavigator();
@@ -108,6 +110,38 @@ function AppView({navigate}) {
             
           }}
           component={ViewDetails}
+        />
+        <Stack.Screen
+          name="LabourData"
+          options={{
+            title: 'Labour Data',
+            headerTitleStyle: {
+              fontFamily: 'Gilroy-Medium',
+            },
+            headerStyle:{
+              backgroundColor: 'white',
+            },
+            headerTitleAlign: 'center',
+            headerShadowVisible: false,
+            
+          }}
+          component={LabourData}
+        />
+        <Stack.Screen
+          name="AddLabourData"
+          options={{
+            title: 'Add Labour Data',
+            headerTitleStyle: {
+              fontFamily: 'Gilroy-Medium',
+            },
+            headerStyle:{
+              backgroundColor: 'white',
+            },
+            headerTitleAlign: 'center',
+            headerShadowVisible: false,
+            
+          }}
+          component={AddLabourData}
         />
       </Stack.Navigator>
     </NavigationContainer>
