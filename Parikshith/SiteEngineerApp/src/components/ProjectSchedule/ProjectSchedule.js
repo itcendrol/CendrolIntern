@@ -54,6 +54,7 @@ function ProjectSchedule({navigation}) {
             placeholder="Search by Project Name"
           />
         </View>
+        {console.log('-=-=-=',...allSchedules)}
         {allSchedules.map(ScheduleItem => (
           <View style={styles.cards}>
             <View
@@ -78,6 +79,8 @@ function ProjectSchedule({navigation}) {
                   navigation.navigate('ViewSchedule', {
                     tasks: allSchedules,
                     proj_id: ScheduleItem.project_id,
+                    proj_name: ScheduleItem.project_name,
+                    project_stage: ScheduleItem.project_stage,
                   })
                 }>
                 <Text

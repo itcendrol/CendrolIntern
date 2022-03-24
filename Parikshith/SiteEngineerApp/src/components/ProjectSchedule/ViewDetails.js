@@ -17,10 +17,6 @@ import {
 import LabourData from '../LabourData/LabourData';
 
 function ViewDetails(props, {navigation}) {
-  console.log(props.route.params.taskDets);
-
-  console.log(props.route.params.proj_id);
-
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
       <ScrollView style={{backgroundColor: 'white', paddingTop: 15}}>
@@ -41,7 +37,9 @@ function ViewDetails(props, {navigation}) {
                   {props.route.params.main_task}
                 </Text>
               </View>
-              <Text style={[styles.infoText, {color: '#FCC314'}]}>{props.route.params.total_days+' Days'}</Text>
+              <Text style={[styles.infoText, {color: '#FCC314'}]}>
+                {props.route.params.total_days + ' Days'}
+              </Text>
             </View>
             <View style={styles.BiColorCardDn}>
               <Text style={[styles.lableText, {fontSize: 15}]}>Due Date</Text>
@@ -81,7 +79,7 @@ function ViewDetails(props, {navigation}) {
                     </Text>
                   </View>
                   <Text style={[styles.infoText, {color: '#FCC314'}]}>
-                  {det.total_days+' Days'}
+                    {det.total_days + ' Days'}
                   </Text>
                 </View>
                 <View style={styles.SubTaskCard2}>
@@ -110,9 +108,14 @@ function ViewDetails(props, {navigation}) {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                      onPress={() => {
-                      props.navigation.navigate('LabourData', {task_id: det._id, proj_id: props.route.params.proj_id});
-                      }}
+                    onPress={() => {
+                      props.navigation.navigate('LabourData', {
+                        task_id: det._id,
+                        proj_id: props.route.params.proj_id,
+                        proj_name: props.route.params.proj_name,
+                        project_stage: props.route.params.project_stage,
+                      });
+                    }}
                     style={styles.buttons}>
                     <Text style={[styles.infoText, {fontSize: 15}]}>
                       View Labour Data
@@ -120,9 +123,9 @@ function ViewDetails(props, {navigation}) {
                   </TouchableOpacity>
                 </View>
 
-                <View style={styles.completedMsg}>
+                {/* <View style={styles.completedMsg}>
                   <Text style={{color: '#3ADD5E'}}>Completed</Text>
-                </View>
+                </View> */}
               </View>
             ))}
           </View>

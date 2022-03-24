@@ -53,6 +53,8 @@ function ViewSchedule(props, {navigation}) {
                     to_date: taskName.to_date,
                     total_days: taskName.total_days,
                     proj_id: props.route.params.proj_id,
+                    proj_name: props.route.params.proj_name,
+                    project_stage: props.route.params.project_stage,
                   })
                 }>
                 <Text

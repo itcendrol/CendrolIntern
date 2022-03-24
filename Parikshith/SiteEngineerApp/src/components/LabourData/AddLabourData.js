@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import LabourerDataInput from './LabourerDataInput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   ScrollView,
@@ -15,8 +16,8 @@ import {
   TextInput,
   Button,
   Alert,
+  ToastAndroid,
 } from 'react-native';
-import {propsFlattener} from 'native-base/lib/typescript/hooks/useThemeProps/propsFlattener';
 
 function AddLabourData(props) {
   const [modalVisible, setModalVisible] = useState(true);
@@ -31,6 +32,10 @@ function AddLabourData(props) {
   //   Validation
   const [conNameError, setConNameError] = useState('#E3E3E3');
   const [LabourStatusError, setLabourStatusError] = useState('#E3E3E3');
+  const [contractorList, setContractorList] = useState([]);
+  const [Uname, setUname] = useState('');
+
+  const axios = require('axios').default;
 
   function closeModal() {
     setModalVisible(false);
@@ -45,6 +50,24 @@ function AddLabourData(props) {
     addInputFields();
   }, []);
 
+  useEffect(() => {
+    const proj_id = props.proj_id;
+    setUname(AsyncStorage.getItem('Name'));
+    try {
+      axios({
+        method: 'get',
+        url: `https://94.237.65.99:4000/getcontractor?project_id=${proj_id}`,
+      }).then(response => {
+        setContractorList([]);
+        response.data.contractor.map(cont =>
+          setContractorList(contList => [...contList, cont.name]),
+        );
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+
   function addInputFields() {
     setLabourerDataInputFields([]);
     setLabourerDataInputFields([
@@ -57,16 +80,14 @@ function AddLabourData(props) {
     setLabourCounter(labourCounter + 1);
   }
 
-  function labourDataInputs(labourType, noOfLabour) {
-    // console.log(labourType + ' ' + noOfLabour);
+  function labourDataInputs(labour_type, qty) {
     const labourerArray = labourerData;
     labourerArray.splice(labourCounter, 1, {
-      labourType: labourType,
-      noOfLabour: noOfLabour,
+      labour_type: labour_type,
+      qty: qty,
     });
     setLabourerData([]);
     setLabourerData(labourerArray);
-    console.log(labourerArray);
   }
 
   function dataValidation() {
@@ -77,45 +98,79 @@ function AddLabourData(props) {
       // );
       if (conName === '') {
         setConNameError('red');
+        return false;
       } else {
         setConNameError('#E3E3E3');
       }
       if (labourStatus === '') {
         setLabourStatusError('red');
+        return false;
       } else {
         setLabourStatusError('#E3E3E3');
       }
     } else {
       setConNameError('#E3E3E3');
       setLabourStatusError('#E3E3E3');
+      return true;
     }
   }
 
   function dynamicFieldValidation() {
-    console.log(labourerData);
     let len = labourerData.length;
     if (len >= 1) {
       labourerData.map(data => {
-        console.log(data.labourType);
-        if (data.labourType === '' || data.noOfLabour === '') {
+        if (data.labour_type === '' || data.qty === '') {
           Alert.alert(
             'Labour Data Incomplete',
             'Enter both Labour Type and No. Of Labour.',
           );
+          return false;
         }
       });
     } else {
       Alert.alert('Labour Data Incomplete', 'Enter Labour Data.');
+      return false;
     }
+
+    return true;
   }
 
   function submitLabourData() {
-    dataValidation();
-    dynamicFieldValidation();
-    Alert.alert('Confirmation Popup', 'Confirmation text', [
-      {text: 'Cancel'},
-      {text: 'Ok'},
-    ]);
+    if (dataValidation()) {
+      if (dynamicFieldValidation()) {
+        
+        const proj_name = props.proj_name;
+        const project_stage = props.project_stage;
+        const task_id = props.task_id;
+        dataToBeSent = {
+          project_name: proj_name,
+          // project_stage: project_stage,
+          work_description: desc,
+          labour_status: labourStatus,
+          task_id: task_id,
+          labour: labourerData,
+          date: todayDate,
+        };
+        console.log(dataToBeSent);
+        axios
+          .post(
+            `https://94.237.65.99:4000/addlabour?contractor_name=${conName}`,
+            dataToBeSent,
+          )
+          .then(function (response) {
+            setModalVisible(true);
+            Alert.alert('Data Sent', 'Labour data added successfully.', [
+              {text: 'Ok', onPress: () => closeModal()},
+            ]);
+          });
+      } else {
+        ToastAndroid.showWithGravity(
+          'Error in data input',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      }
+    }
   }
 
   return (
@@ -191,18 +246,16 @@ function AddLabourData(props) {
                         setConName(itemValue);
                       }}>
                       <Picker.Item label="Select" value="" />
-                      <Picker.Item label="Shanmugam" value="default" />
-                      {/* {matCatList.map(matCat => (
-                        <Picker.Item
-                          label={matCat.category_name}
-                          value={matCat.category_name}
-                        />
-                      ))} */}
+                      {contractorList.map(cont => (
+                        <Picker.Item label={cont} value={cont} />
+                      ))}
                     </Picker>
                   </View>
-                  {conNameError === 'red' && 
-                    <Text style={{color: 'red', fontFamily: 'Gilroy-Medium'}}>Required</Text>
-                  }
+                  {conNameError === 'red' && (
+                    <Text style={{color: 'red', fontFamily: 'Gilroy-Medium'}}>
+                      Required
+                    </Text>
+                  )}
                 </View>
                 <View>
                   <Text style={styles.lableText}>Labour Status</Text>
@@ -237,9 +290,11 @@ function AddLabourData(props) {
                       <Picker.Item label="Didn't Came" value="DidntCame" />
                     </Picker>
                   </View>
-                  {LabourStatusError === 'red' && 
-                    <Text style={{color: 'red', fontFamily: 'Gilroy-Medium'}}>Required</Text>
-                  }
+                  {LabourStatusError === 'red' && (
+                    <Text style={{color: 'red', fontFamily: 'Gilroy-Medium'}}>
+                      Required
+                    </Text>
+                  )}
                 </View>
               </View>
               <View style={styles.tableHeader}>

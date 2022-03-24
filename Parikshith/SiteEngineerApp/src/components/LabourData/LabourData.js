@@ -7,7 +7,7 @@ import {
   Modal,
   StyleSheet,
   Text,
-  useColorScheme,
+  RefreshControl,
   View,
   Image,
   Dimensions,
@@ -20,6 +20,34 @@ function LabourData(props) {
   const [viewMoreStatus, setViewMoreStatus] = useState(false);
   const [addDataModal, setAddDataModal] = useState(false);
   const [labourForTask, setLabourForTask] = useState([]);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setLabourForTask([]);
+
+    getApiData();
+    async function getApiData() {
+      try {
+        axios({
+          method: 'get',
+          url: `https://94.237.65.99:4000/getlabourfortask?_id=${props.route.params.task_id}`,
+        }).then(response => {
+          setLabourForTask([]);
+          setLabourForTask(response.data.Labours);
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const axios = require('axios').default;
 
@@ -41,7 +69,6 @@ function LabourData(props) {
         }).then(response => {
           setLabourForTask([]);
           setLabourForTask(response.data.Labours);
-          // console.log(response.data.Labours);
         });
       } catch (e) {
         console.log(e);
@@ -55,15 +82,21 @@ function LabourData(props) {
         <AddLabourData
           closePopup={closePopup}
           proj_id={props.route.params.proj_id}
+          proj_name={props.route.params.proj_name}
+          project_stage={props.route.params.project_stage}
+          task_id={props.route.params.task_id}
         />
       )}
-      <ScrollView>
+      <ScrollView
+        style={{backgroundColor: 'white'}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={{paddingBottom: windowHeight / 5}}>
           {labourForTask.map(dets => {
             contName = dets;
             return dets.labour_data.map(innerdets => {
               date = contName.name;
-              var showMore = false;
               return (
                 <View style={styles.cards}>
                   <View style={styles.leftBorder}>

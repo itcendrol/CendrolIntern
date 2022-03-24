@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SiteEngHome from './SiteEngHome/SiteEngHome';
-import {Home} from 'react-iconly';
+import ToDo from './ToDo/ToDo';
 import ProjectSchedule from './ProjectSchedule/ProjectSchedule';
 import {
   SafeAreaView,
@@ -57,7 +57,7 @@ function TabNav() {
           headerTitleAlign: 'center',
         }}
         name="To -Do"
-        component={ProjectSchedule}
+        component={ToDo}
       />
       <Tab.Screen
         options={{
